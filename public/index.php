@@ -1,12 +1,15 @@
 <?php
 
 define('ROOT_DIR', dirname(dirname(__FILE__)));
-define('API_URL', 'http://api.matmuh.net');
 
-if (ROOT_DIR == '/var/www/tez/api')
+if (ROOT_DIR == '/var/www/tez/api') {
+    define('API_URL', 'http://api.matmuh.net');
     define('TEST', false);
-else
+}
+else {
+    define('API_URL', 'http://api.tez');
     define('TEST', true);
+}
 
 set_include_path('.'
                     . PATH_SEPARATOR . ROOT_DIR . '/library'
@@ -61,7 +64,7 @@ $app->hook('slim.before.router', function () use ($app) {
             $tokenRequire = array('user', 'post', 'gallery');
 
             if (in_array($controller, $tokenRequire)) {
-                if ($action != 'get' && $action != 'search') {
+                if ($action != 'get' && $action != 'search' && $action != 'banner') {
                     if (!$post['access_token'])
                         $error = "Token eksik!";
                     else {

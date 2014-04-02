@@ -32,14 +32,14 @@ $app->map('/post/get/:id', function($id) use ($app) {
     $app->view()->setData('result', $res);
 })->via("GET", "POST");
 
-$app->post('/post/search', function() use ($app) {
+$app->map('/post/search', function() use ($app) {
     $post = $app->post;
 
     $tbl = new TblPost();
     $res = $tbl->search($post);
 
     $app->view()->setData('result', $res);
-});
+})->via("GET", "POST");
 
 /*
  *
@@ -117,6 +117,20 @@ $app->map('/post/search/comment', function() use ($app) {
 
     $tbl = new TblComment();
     $res = $tbl->search($post);
+
+    $app->view()->setData('result', $res);
+})->via("GET", "POST");
+
+/*
+ *
+ *  BANNER
+ *
+ */
+$app->map('/post/banner', function() use ($app) {
+    $post = $app->post;
+
+    $tbl = new TblPost();
+    $res = $tbl->getLatestPostsForBanner($post);
 
     $app->view()->setData('result', $res);
 })->via("GET", "POST");

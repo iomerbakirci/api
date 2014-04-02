@@ -121,6 +121,16 @@ $app->get('/test/post/search', function() use ($app) {
     $app->response()->body($res);
 });
 
+$app->get('/test/post/banner', function() use ($app) {
+    $post = array(
+        'client_key' => '1064f3a3e98620580b5b',
+        'client_secret' => 'd044c50e14504b83613f'
+    );
+
+    $res = \MatMuh\Api::request('/post/banner', $post, true);
+    $app->response()->body($res);
+});
+
 $app->get('/test/category/add', function() use ($app) {
     $post = array(
         'client_key' => '1064f3a3e98620580b5b',

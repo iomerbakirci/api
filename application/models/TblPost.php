@@ -6,7 +6,7 @@ class TblPost extends Table
     protected $_name = 'tbl_post';
     protected $_primary = 'id';
     protected $_sequence = 'id';
-    protected $_cols = array('id', 'post_author', 'post_type', 'post_title', 'post_content', 'post_excerpt', 'post_url', 'post_thumbnail', 'post_banner', 'photo_gallery_id', 'video_gallery_id', 'tags', 'post_status');
+    protected $_cols = array('id', 'post_author', 'post_type', 'post_title', 'post_content', 'post_excerpt', 'post_url', 'post_thumbnail', 'post_banner_flag', 'post_banner', 'photo_gallery_id', 'video_gallery_id', 'tags', 'post_status');
 
     public function add($data)
     {
@@ -105,6 +105,23 @@ class TblPost extends Table
         if ($data['total_count'])
             $param['total_count'] = $data['total_count'];
 
+        $rows = $this->select($param);
+
+        return array('status' => 'success', 'post' => $rows);
+    }
+
+    public function getLatestPostsForBanner($data)
+    {
+        $where = array();
+        $where['post_status'] = 1;
+        $where['post_type'] = 'post';
+        $where['post_banner_flag'] = 1;
+
+        if ($data['category'])
+            $where[] = "id IN(SELECT post_id FROM tbl_post_category WHERE category_id=$data[category])";
+
+        $chosenColumns = array('id', 'post_date', 'post_title', 'post_excerpt', 'post_url', 'post_banner');
+        $param = array('where' => $where, 'order' => 'post_date DESC', 'limit' => 10, 'cols' => $chosenColumns);
         $rows = $this->select($param);
 
         return array('status' => 'success', 'post' => $rows);
